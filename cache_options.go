@@ -14,7 +14,7 @@ type (
 
 func defaultCacheOptions() cacheOptions {
 	return cacheOptions{
-		Serializer: &SerializerJson{},
+		Serializer: &SerializerMsgpack{},
 	}
 }
 

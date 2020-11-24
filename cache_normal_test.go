@@ -58,8 +58,32 @@ func TestSet(t *testing.T) {
 		if nil != err {
 			t.Fatalf("从缓存取出数据出错：%s", err)
 		}
-		if *obj != st.expected {
-			t.Fatal("设置的缓存和从缓存取出来的值不匹配")
+
+		if !checkExpected(obj, st.expected) {
+			t.Fatalf("设置的缓存和从缓存取出来的值不匹配，缓存值：%v，期望值：%v", *obj, st.expected)
 		}
 	}
+}
+
+func checkExpected(obj *interface{}, expected interface{}) (check bool) {
+	switch expected.(type) {
+	case int:
+		check = (*obj).(int64) == int64(expected.(int))
+	case uint:
+		check = (*obj).(int64) == int64(expected.(uint))
+	case int32:
+		check = (*obj).(int64) == int64(expected.(int32))
+	case uint32:
+		check = (*obj).(int64) == int64(expected.(uint32))
+	case int64:
+		check = (*obj).(int64) == expected
+	case uint64:
+		check = (*obj).(int64) == int64(expected.(uint64))
+	case float64:
+		check = (*obj).(float64) == expected
+	case bool:
+		check = (*obj).(bool) == expected
+	}
+
+	return
 }

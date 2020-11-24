@@ -49,7 +49,7 @@ func TestSet(t *testing.T) {
 	}
 
 	for _, st := range setTests {
-		if err := cache.Set(st.key, st.expected); nil != err {
+		if err := cache.Set(st.key, &st.expected); nil != err {
 			t.Fatalf("设置缓存出错：%s", err)
 		}
 	}
@@ -58,7 +58,7 @@ func TestSet(t *testing.T) {
 		if nil != err {
 			t.Fatalf("从缓存取出数据出错：%s", err)
 		}
-		if obj != st.expected {
+		if *obj != st.expected {
 			t.Fatal("设置的缓存和从缓存取出来的值不匹配")
 		}
 	}

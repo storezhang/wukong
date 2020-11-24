@@ -23,7 +23,7 @@ func New(store Store, options ...CacheOption) Cache {
 	}
 }
 
-func (cn *cacheNormal) Get(key string) (obj interface{}, err error) {
+func (cn *cacheNormal) Get(key string) (obj *interface{}, err error) {
 	var data []byte
 
 	if data, err = cn.store.Get(key); nil != err {
@@ -35,7 +35,7 @@ func (cn *cacheNormal) Get(key string) (obj interface{}, err error) {
 	return
 }
 
-func (cn *cacheNormal) Set(key string, obj interface{}, options ...Option) (err error) {
+func (cn *cacheNormal) Set(key string, obj *interface{}, options ...Option) (err error) {
 	newOptions := cn.options.options
 	for _, apply := range options {
 		apply(&newOptions)

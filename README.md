@@ -22,8 +22,8 @@
 
 ## 内置序列化
 - Msgpack
-- JSON
-- XML
+- Json
+- Xml
 
 
 ## 为什么要写这个缓存

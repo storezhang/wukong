@@ -9,6 +9,6 @@ type cacheOptions struct {
 
 func defaultCacheOptions() cacheOptions {
 	return cacheOptions{
-		Serializer: &SerializerMsgpack{},
+		Serializer: &SerializerGob{},
 	}
 }

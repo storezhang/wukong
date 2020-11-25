@@ -23,13 +23,13 @@ func New(store Store, options ...cacheOption) Cache {
 	}
 }
 
-func (cn *cacheNormal) Get(key string, value interface{}) (err error) {
+func (cn *cacheNormal) Get(key string) (value interface{}, err error) {
 	var data []byte
 
 	if data, err = cn.store.Get(key); nil != err {
 		return
 	}
-	err = cn.options.Serializer.Unmarshal(data, value)
+	value, err = cn.options.Serializer.Unmarshal(data)
 
 	return
 }

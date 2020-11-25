@@ -1,13 +1,13 @@
 package wukong
 
 import (
-	`log`
-	`os`
-	`testing`
+	"log"
+	"os"
+	"testing"
 
-	`github.com/alicebob/miniredis`
-	`github.com/go-redis/redis/v8`
-	`github.com/rs/xid`
+	"github.com/alicebob/miniredis"
+	"github.com/go-redis/redis/v8"
+	"github.com/rs/xid"
 )
 
 var (
@@ -74,17 +74,19 @@ func TestSet(t *testing.T) {
 	for _, st := range setTests {
 		switch st.expected.(type) {
 		case user:
-			cachedUser := user{}
-			if err := cache.Get(st.key, &cachedUser); nil != err {
+			if err := cache.Set(st.key, st.expected.(user)); nil != err {
+				t.Fatalf("设置缓存出错：%s", err)
+			}
+
+			if cachedUser, err := cache.Get(st.key); nil != err {
 				t.Fatalf("从缓存取出数据出错：%s", err)
-			} else if !st.expected.(user).compare(cachedUser) {
+			} else if !st.expected.(user).compare(cachedUser.(user)) {
 				t.Fatalf("设置的缓存和从缓存取出来的值不匹配，缓存值：%v，期望值：%v", cachedUser, st.expected)
 			}
 		case []user:
-			var cachedUsers []user
-			if err := cache.Get(st.key, &cachedUsers); nil != err {
+			if cachedUsers, err := cache.Get(st.key); nil != err {
 				t.Fatalf("从缓存取出数据出错：%s", err)
-			} else if len(st.expected.([]user)) != len(cachedUsers) || !st.expected.([]user)[0].compare(cachedUsers[0]) {
+			} else if len(st.expected.([]user)) != len(cachedUsers.([]user)) || !st.expected.([]user)[0].compare(cachedUsers.([]user)[0]) {
 				t.Fatalf("设置的缓存和从缓存取出来的值不匹配，缓存值：%v，期望值：%v", cachedUsers, st.expected)
 			}
 		}

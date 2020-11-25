@@ -112,9 +112,9 @@ value := cache.Get("my-key")
 ```go
 type Serializer interface {
 	// Marshal 将结构体编码成二进制数组
-	func (sj *SerializerJson) Marshal(obj interface{}) ([]byte, error)
+	Marshal(obj interface{}) ([]byte, error)
 	// Unmarshal 将二进制数据解码成结构体
-	func (sj *SerializerJson) Unmarshal(data []byte, obj interface{}) error
+	Unmarshal(data []byte, obj interface{}) error
 }
 ```
 

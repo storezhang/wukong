@@ -17,6 +17,7 @@
 
 ## 内置存储
 - Redis
+- Memcache
 - BigCache
 
 

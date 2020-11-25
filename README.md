@@ -50,7 +50,7 @@ bigcache, _ := bigcache.NewBigCache(bigcache.DefaultConfig(5*time.Minute))
 store := store.NewBigcache(bigcache)
 
 cache := wukong.New(store)
-err := cache.Set("my-key", "my-value", WithExpiration()15*time.Second)
+err := cache.Set("my-key", "my-value", WithExpiration(15*time.Second))
 if err != nil {
     panic(err)
 }

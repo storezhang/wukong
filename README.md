@@ -31,11 +31,25 @@
 简单缓存只提供了缓存的基本功能，不包括链式调用、监控等功能
 #### 使用Redis
 ```go
-redis := wukong.NewRedis(redis.NewClient(&redis.Options{
+store := wukong.NewRedis(redis.NewClient(&redis.Options{
 	Addr: "127.0.0.1:6379",
 }))
 
-cache := wukong.New(redis)
+cache := wukong.New(store)
+err := cache.Set("my-key", "my-value", WithExpiration()15*time.Second)
+if err != nil {
+    panic(err)
+}
+
+value := cache.Get("my-key")
+```
+
+#### 使用BigCache
+```go
+bigcache, _ := bigcache.NewBigCache(bigcache.DefaultConfig(5 * time.Minute))
+store := store.NewBigcache(bigcache)
+
+cache := wukong.New(store)
 err := cache.Set("my-key", "my-value", WithExpiration()15*time.Second)
 if err != nil {
     panic(err)

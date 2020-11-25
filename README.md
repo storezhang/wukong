@@ -46,7 +46,7 @@ value := cache.Get("my-key")
 
 #### 使用BigCache
 ```go
-bigcache, _ := bigcache.NewBigCache(bigcache.DefaultConfig(5 * time.Minute))
+bigcache, _ := bigcache.NewBigCache(bigcache.DefaultConfig(5*time.Minute))
 store := store.NewBigcache(bigcache)
 
 cache := wukong.New(store)

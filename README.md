@@ -57,3 +57,44 @@ if err != nil {
 
 value := cache.Get("my-key")
 ```
+
+### 定制缓存
+#### 序列化器
+序列化器可以定制你存放在缓存中的数据序列化方式（从结构体到二进制数据以及从二进制数据到结构体），wukong提供了方便使用的序列化器，且内置常用的序列化器
+##### 代码
+```go
+store := wukong.NewRedis(redis.NewClient(&redis.Options{
+	Addr: "127.0.0.1:6379",
+}), WithSerializer(wukong.SerializerJson{}))
+
+cache := wukong.New(store)
+err := cache.Set("my-key", "my-value", WithExpiration()15*time.Second)
+if err != nil {
+    panic(err)
+}
+
+value := cache.Get("my-key")
+```
+
+##### 支持的序列化器有
+- wukong.SerializerJson
+- wukong.SerializerXml
+- wukong.SerializerMsgpack
+
+##### 增加自己的序列化器
+实现序列化接口，就可以方便的实现自己的序列化器
+```go
+import (
+	`encoding/json`
+)
+
+type SerializerJson struct{}
+
+func (sj *SerializerJson) Marshal(obj interface{}) ([]byte, error) {
+	return json.Marshal(obj)
+}
+
+func (sj *SerializerJson) Unmarshal(data []byte, obj interface{}) error {
+	return json.Unmarshal(data, obj)
+}
+```

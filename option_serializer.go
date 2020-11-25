@@ -9,6 +9,6 @@ func WithSerializer(serializer Serializer) *optionSerializer {
 	return &optionSerializer{serializer: serializer}
 }
 
-func (os *optionSerializer) apply(options *cacheOptions) {
+func (os *optionSerializer) applyCache(options *cacheOptions) {
 	options.Serializer = os.serializer
 }

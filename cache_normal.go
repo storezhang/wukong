@@ -11,10 +11,10 @@ type cacheNormal struct {
 }
 
 // New 创建一个普通缓存
-func New(store Store, options ...CacheOption) Cache {
+func New(store Store, options ...cacheOption) Cache {
 	appliedOptions := defaultCacheOptions()
-	for _, apply := range options {
-		apply(&appliedOptions)
+	for _, option := range options {
+		option.applyCache(&appliedOptions)
 	}
 
 	return &cacheNormal{
@@ -23,26 +23,25 @@ func New(store Store, options ...CacheOption) Cache {
 	}
 }
 
-func (cn *cacheNormal) Get(key string) (obj *interface{}, err error) {
+func (cn *cacheNormal) Get(key string, value interface{}) (err error) {
 	var data []byte
 
 	if data, err = cn.store.Get(key); nil != err {
 		return
 	}
-	obj = new(interface{})
-	err = cn.options.Serializer.Unmarshal(data, obj)
+	err = cn.options.Serializer.Unmarshal(data, value)
 
 	return
 }
 
-func (cn *cacheNormal) Set(key string, obj *interface{}, options ...Option) (err error) {
+func (cn *cacheNormal) Set(key string, value interface{}, options ...option) (err error) {
 	newOptions := cn.options.options
-	for _, apply := range options {
-		apply(&newOptions)
+	for _, option := range options {
+		option.apply(&newOptions)
 	}
 
 	var data []byte
-	if data, err = cn.options.Serializer.Marshal(obj); nil != err {
+	if data, err = cn.options.Serializer.Marshal(value); nil != err {
 		return
 	}
 	err = cn.store.Set(key, data, options...)
@@ -54,7 +53,7 @@ func (cn *cacheNormal) Delete(key string) (err error) {
 	return cn.store.Delete(key)
 }
 
-func (cn *cacheNormal) Invalidate(options ...InvalidateOption) (err error) {
+func (cn *cacheNormal) Invalidate(options ...invalidateOption) (err error) {
 	return cn.store.Invalidate(options...)
 }
 

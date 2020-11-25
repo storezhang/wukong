@@ -17,6 +17,12 @@ var (
 type user struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Age      int    `json:"age"`
+	Money    int64  `json:"money"`
+}
+
+func (u user) compare(ou user) bool {
+	return u.Username == ou.Username && u.Password == ou.Password && u.Age == ou.Age && u.Money == ou.Money
 }
 
 func TestMain(m *testing.M) {
@@ -38,14 +44,26 @@ func TestSet(t *testing.T) {
 		key      string
 		expected interface{}
 	}{
-		{xid.New().String(), true},
-		{xid.New().String(), false},
-		{xid.New().String(), 1},
-		{xid.New().String(), 1.0},
-		{xid.New().String(), []int{1, 2, 3}},
-		{xid.New().String(), []bool{true, false, true}},
-		{xid.New().String(), []float64{1.0, 2.0}},
-		{xid.New().String(), 13},
+		{xid.New().String(), user{
+			Username: "storezhang",
+			Password: "test",
+			Age:      34,
+			Money:    2000000000000,
+		}},
+		{xid.New().String(), []user{
+			{
+				Username: "storezhang",
+				Password: "test",
+				Age:      34,
+				Money:    2000000000000,
+			},
+			{
+				Username: "taoismzhang",
+				Password: "test1",
+				Age:      35,
+				Money:    2000000000001,
+			},
+		}},
 	}
 
 	for _, st := range setTests {
@@ -54,36 +72,21 @@ func TestSet(t *testing.T) {
 		}
 	}
 	for _, st := range setTests {
-		obj, err := cache.Get(st.key)
-		if nil != err {
-			t.Fatalf("从缓存取出数据出错：%s", err)
-		}
-
-		if !checkExpected(obj, st.expected) {
-			t.Fatalf("设置的缓存和从缓存取出来的值不匹配，缓存值：%v，期望值：%v", *obj, st.expected)
+		switch st.expected.(type) {
+		case user:
+			cachedUser := user{}
+			if err := cache.Get(st.key, &cachedUser); nil != err {
+				t.Fatalf("从缓存取出数据出错：%s", err)
+			} else if !st.expected.(user).compare(cachedUser) {
+				t.Fatalf("设置的缓存和从缓存取出来的值不匹配，缓存值：%v，期望值：%v", cachedUser, st.expected)
+			}
+		case []user:
+			var cachedUsers []user
+			if err := cache.Get(st.key, &cachedUsers); nil != err {
+				t.Fatalf("从缓存取出数据出错：%s", err)
+			} else if len(st.expected.([]user)) != len(cachedUsers) || !st.expected.([]user)[0].compare(cachedUsers[0]) {
+				t.Fatalf("设置的缓存和从缓存取出来的值不匹配，缓存值：%v，期望值：%v", cachedUsers, st.expected)
+			}
 		}
 	}
-}
-
-func checkExpected(obj *interface{}, expected interface{}) (check bool) {
-	switch expected.(type) {
-	case int:
-		check = (*obj).(int64) == int64(expected.(int))
-	case uint:
-		check = (*obj).(int64) == int64(expected.(uint))
-	case int32:
-		check = (*obj).(int64) == int64(expected.(int32))
-	case uint32:
-		check = (*obj).(int64) == int64(expected.(uint32))
-	case int64:
-		check = (*obj).(int64) == expected
-	case uint64:
-		check = (*obj).(int64) == int64(expected.(uint64))
-	case float64:
-		check = (*obj).(float64) == expected
-	case bool:
-		check = (*obj).(bool) == expected
-	}
-
-	return
 }

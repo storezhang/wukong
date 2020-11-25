@@ -23,10 +23,10 @@ type storeRedis struct {
 }
 
 // NewRedis 创建一个Redis存储
-func NewRedis(client *redis.Client, options ...Option) Store {
+func NewRedis(client *redis.Client, options ...option) Store {
 	appliedOptions := defaultOptions()
-	for _, apply := range options {
-		apply(&appliedOptions)
+	for _, option := range options {
+		option.apply(&appliedOptions)
 	}
 
 	return &storeRedis{
@@ -48,10 +48,10 @@ func (sr *storeRedis) GetWithTTL(key string) (data []byte, ttl time.Duration, er
 	return
 }
 
-func (sr *storeRedis) Set(key string, data []byte, options ...Option) (err error) {
+func (sr *storeRedis) Set(key string, data []byte, options ...option) (err error) {
 	newOptions := sr.options
-	for _, apply := range options {
-		apply(&newOptions)
+	for _, option := range options {
+		option.apply(&newOptions)
 	}
 
 	if err = sr.client.Set(context.Background(), key, data, newOptions.Expiration).Err(); nil != err {
@@ -103,10 +103,10 @@ func (sr *storeRedis) Delete(key string) (err error) {
 	return
 }
 
-func (sr *storeRedis) Invalidate(options ...InvalidateOption) (err error) {
+func (sr *storeRedis) Invalidate(options ...invalidateOption) (err error) {
 	appliedOptions := defaultInvalidateOptions()
-	for _, apply := range options {
-		apply(&appliedOptions)
+	for _, option := range options {
+		option.applyInvalidate(&appliedOptions)
 	}
 
 	for _, tag := range appliedOptions.Tags {

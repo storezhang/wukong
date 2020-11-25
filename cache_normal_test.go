@@ -1,13 +1,13 @@
 package wukong
 
 import (
-	"log"
-	"os"
-	"testing"
+	`log`
+	`os`
+	`testing`
 
-	"github.com/alicebob/miniredis"
-	"github.com/go-redis/redis/v8"
-	"github.com/rs/xid"
+	`github.com/alicebob/miniredis`
+	`github.com/go-redis/redis/v8`
+	`github.com/rs/xid`
 )
 
 var (

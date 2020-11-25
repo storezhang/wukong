@@ -92,18 +92,11 @@ value := cache.Get("my-key")
 ##### 增加自己的序列化器
 实现序列化接口，就可以方便的实现自己的序列化器
 ```go
-import (
-	`encoding/json`
-)
-
-type SerializerJson struct{}
-
-func (sj *SerializerJson) Marshal(obj interface{}) ([]byte, error) {
-	return json.Marshal(obj)
-}
-
-func (sj *SerializerJson) Unmarshal(data []byte, obj interface{}) error {
-	return json.Unmarshal(data, obj)
+type Serializer interface {
+	// Marshal 将结构体编码成二进制数组
+	func (sj *SerializerJson) Marshal(obj interface{}) ([]byte, error)
+	// Unmarshal 将二进制数据解码成结构体
+	func (sj *SerializerJson) Unmarshal(data []byte, obj interface{}) error
 }
 ```
 

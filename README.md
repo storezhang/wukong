@@ -38,11 +38,9 @@
 
 #### 使用Redis
 ```go
-store := wukong.NewRedis(memcache.New(
-	"10.0.0.1:11211", 
-	"10.0.0.2:11211", 
-	"10.0.0.3:11212",
-))
+store := wukong.NewMemcache(redis.NewClient(&redis.Options{
+	Addr: "127.0.0.1:6379",
+}))
 
 cache := wukong.New(store)
 err := cache.Set("my-key", "my-value", WithExpiration(15*time.Second))
@@ -55,9 +53,11 @@ value := cache.Get("my-key")
 
 #### 使用Memcache
 ```go
-store := wukong.NewMemcache(redis.NewClient(&redis.Options{
-	Addr: "127.0.0.1:6379",
-}))
+store := wukong.NewRedis(memcache.New(
+	"10.0.0.1:11211", 
+	"10.0.0.2:11211", 
+	"10.0.0.3:11212",
+))
 
 cache := wukong.New(store)
 err := cache.Set("my-key", "my-value", WithExpiration(15*time.Second))

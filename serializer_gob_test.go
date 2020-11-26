@@ -8,8 +8,8 @@ var (
 	sg *SerializerGob
 )
 
-func TestMarshal(t *testing.T) {
-	if _, err := sg.Marshal(&user{
+func TestGobEncode(t *testing.T) {
+	if _, err := sg.Encode(&user{
 		Username: "storezhang",
 		Password: "test",
 		Age:      34,

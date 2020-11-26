@@ -1,6 +1,6 @@
 package wukong
 
 type Decoder interface {
-	// Unmarshal 将二进制数据解码成结构体
-	Unmarshal(data []byte) (interface{}, error)
+	// Decode 将二进制数据解码成结构体
+	Decode(data []byte) (interface{}, error)
 }

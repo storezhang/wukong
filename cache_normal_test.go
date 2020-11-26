@@ -4,6 +4,7 @@ import (
 	`log`
 	`os`
 	`testing`
+	`time`
 
 	`github.com/alicebob/miniredis`
 	`github.com/go-redis/redis/v8`
@@ -31,9 +32,13 @@ func TestMain(m *testing.M) {
 		log.Fatalf("启动Redis服务器出错：%s", err)
 	}
 
+	gob := &SerializerGob{}
+	gob.RegisterGobConcreteType(user{})
+	gob.RegisterGobConcreteType([]user{})
+
 	cache = New(NewRedis(redis.NewClient(&redis.Options{
 		Addr: mr.Addr(),
-	})))
+	})), WithSerializer(gob), WithExpiration(time.Second))
 
 	code := m.Run()
 	os.Exit(code)
@@ -80,10 +85,14 @@ func TestSet(t *testing.T) {
 
 			if cachedUser, err := cache.Get(st.key); nil != err {
 				t.Fatalf("从缓存取出数据出错：%s", err)
-			} else if !st.expected.(user).compare(cachedUser.(user)) {
+			} else if !st.expected.(user).compare(*cachedUser.(*user)) {
 				t.Fatalf("设置的缓存和从缓存取出来的值不匹配，缓存值：%v，期望值：%v", cachedUser, st.expected)
 			}
 		case []user:
+			if err := cache.Set(st.key, st.expected.([]user)); nil != err {
+				t.Fatalf("设置缓存出错：%s", err)
+			}
+
 			if cachedUsers, err := cache.Get(st.key); nil != err {
 				t.Fatalf("从缓存取出数据出错：%s", err)
 			} else if len(st.expected.([]user)) != len(cachedUsers.([]user)) || !st.expected.([]user)[0].compare(cachedUsers.([]user)[0]) {

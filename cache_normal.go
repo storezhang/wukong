@@ -29,7 +29,7 @@ func (cn *cacheNormal) Get(key string) (value interface{}, err error) {
 	if data, err = cn.store.Get(key); nil != err {
 		return
 	}
-	value, err = cn.options.Serializer.Unmarshal(data)
+	value, err = cn.options.Serializer.Decode(data)
 
 	return
 }
@@ -41,7 +41,7 @@ func (cn *cacheNormal) Set(key string, value interface{}, options ...option) (er
 	}
 
 	var data []byte
-	if data, err = cn.options.Serializer.Marshal(value); nil != err {
+	if data, err = cn.options.Serializer.Encode(value); nil != err {
 		return
 	}
 	err = cn.store.Set(key, data, options...)

@@ -16,3 +16,7 @@ func WithExpiration(expiration time.Duration) *optionExpiration {
 func (oe *optionExpiration) apply(options *options) {
 	options.Expiration = oe.expiration
 }
+
+func (oe *optionExpiration) applyCache(options *cacheOptions) {
+	options.Expiration = oe.expiration
+}

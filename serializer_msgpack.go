@@ -6,7 +6,7 @@ import (
 
 type SerializerMsgpack struct{}
 
-func (sm *SerializerMsgpack) Marshal(obj interface{}) ([]byte, error) {
+func (sm *SerializerMsgpack) Encode(obj interface{}) ([]byte, error) {
 	return msgpack.Marshal(obj)
 }
 

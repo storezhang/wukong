@@ -3,21 +3,14 @@ package wukong
 import (
 	`bytes`
 	`encoding/gob`
-	`fmt`
 	`reflect`
 	`unsafe`
 )
 
 type SerializerGob struct{}
 
-func (sg *SerializerGob) Marshal(obj interface{}) (data []byte, err error) {
-	sg.registerGobConcreteType(obj)
-
-	if reflect.Struct == reflect.TypeOf(obj).Kind() {
-		err = fmt.Errorf("序列化只支持Struct指针")
-
-		return
-	}
+func (sg *SerializerGob) Encode(obj interface{}) (data []byte, err error) {
+	sg.RegisterGobConcreteType(obj)
 
 	var buffer bytes.Buffer
 	encoder := gob.NewEncoder(&buffer)
@@ -30,7 +23,7 @@ func (sg *SerializerGob) Marshal(obj interface{}) (data []byte, err error) {
 	return
 }
 
-func (sg *SerializerGob) Unmarshal(data []byte) (ptr interface{}, err error) {
+func (sg *SerializerGob) Decode(data []byte) (ptr interface{}, err error) {
 	buffer := bytes.NewBuffer(data)
 	decoder := gob.NewDecoder(buffer)
 
@@ -52,7 +45,7 @@ func (sg *SerializerGob) Unmarshal(data []byte) (ptr interface{}, err error) {
 	return
 }
 
-func (sg *SerializerGob) registerGobConcreteType(obj interface{}) {
+func (sg *SerializerGob) RegisterGobConcreteType(obj interface{}) {
 	typeOf := reflect.TypeOf(obj)
 
 	switch typeOf.Kind() {

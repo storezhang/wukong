@@ -9,11 +9,11 @@ import (
 
 type SerializerJson struct{}
 
-func (sj *SerializerJson) Marshal(obj interface{}) ([]byte, error) {
+func (sj *SerializerJson) Encode(obj interface{}) ([]byte, error) {
 	return json.Marshal(obj)
 }
 
-func (sj *SerializerJson) Unmarshal(data []byte) (ptr interface{}, err error) {
+func (sj *SerializerJson) Decode(data []byte) (ptr interface{}, err error) {
 	buffer := bytes.NewBuffer(data)
 	decoder := json.NewDecoder(buffer)
 

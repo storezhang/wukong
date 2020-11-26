@@ -6,7 +6,7 @@ import (
 
 type SerializerXml struct{}
 
-func (sx *SerializerXml) Marshal(obj interface{}) ([]byte, error) {
+func (sx *SerializerXml) Encode(obj interface{}) ([]byte, error) {
 	return xml.Marshal(obj)
 }
 

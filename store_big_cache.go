@@ -15,7 +15,10 @@ const (
 	BigCacheTagFormatter = "wukong-tag-%s"
 )
 
-var _ Store = (*storeBigCache)(nil)
+var (
+	_ Store = (*storeBigCache)(nil)
+	_       = NewBigCache(bigcache.BigCache{})
+)
 
 // storeBigCache 基于BigCache的缓存存储
 type storeBigCache struct {

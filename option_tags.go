@@ -3,6 +3,7 @@ package wukong
 var (
 	_ option           = (*optionTags)(nil)
 	_ invalidateOption = (*optionTags)(nil)
+	_ invalidateOption = WithTags("")
 )
 
 type optionTags struct {

@@ -15,7 +15,10 @@ const (
 	MemcacheTagFormatter = "wukong-tag-%s"
 )
 
-var _ Store = (*storeMemcache)(nil)
+var (
+	_ Store = (*storeMemcache)(nil)
+	_       = NewMemcache(&memcache.Client{})
+)
 
 // storeMemcache 基于Memcache的缓存存储
 type storeMemcache struct {

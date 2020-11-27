@@ -16,7 +16,10 @@ const (
 	RedisTagFormatter = "wukong-tag-%s"
 )
 
-var _ Store = (*storeRedis)(nil)
+var (
+	_ Store = (*storeRedis)(nil)
+	_       = NewRedis(&redis.Client{})
+)
 
 // storeRedis 基于Redis的缓存存储
 type storeRedis struct {

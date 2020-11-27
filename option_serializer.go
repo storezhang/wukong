@@ -1,5 +1,9 @@
 package wukong
 
+var (
+	_ cacheOption = (*optionSerializer)(nil)
+)
+
 type optionSerializer struct {
 	serializer Serializer
 }

@@ -1,5 +1,10 @@
 package wukong
 
+var (
+	_ option           = (*optionTags)(nil)
+	_ invalidateOption = (*optionTags)(nil)
+)
+
 type optionTags struct {
 	tags []string
 }

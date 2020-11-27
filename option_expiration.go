@@ -4,6 +4,11 @@ import (
 	`time`
 )
 
+var (
+	_ option      = (*optionExpiration)(nil)
+	_ cacheOption = (*optionExpiration)(nil)
+)
+
 type optionExpiration struct {
 	expiration time.Duration
 }

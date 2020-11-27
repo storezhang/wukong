@@ -7,6 +7,8 @@ import (
 	`unsafe`
 )
 
+var _ Serializer = (*SerializerJson)(nil)
+
 type SerializerJson struct{}
 
 func (sj *SerializerJson) Encode(obj interface{}) ([]byte, error) {

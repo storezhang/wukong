@@ -7,11 +7,11 @@ import (
 	`unsafe`
 )
 
-var _ Serializer = (*SerializerGob)(nil)
+var _ Serializer = (*serializerGob)(nil)
 
-type SerializerGob struct{}
+type serializerGob struct{}
 
-func (sg *SerializerGob) Encode(obj interface{}) (data []byte, err error) {
+func (sg *serializerGob) Encode(obj interface{}) (data []byte, err error) {
 	sg.RegisterGobConcreteType(obj)
 
 	var buffer bytes.Buffer
@@ -25,7 +25,7 @@ func (sg *SerializerGob) Encode(obj interface{}) (data []byte, err error) {
 	return
 }
 
-func (sg *SerializerGob) Decode(data []byte) (ptr interface{}, err error) {
+func (sg *serializerGob) Decode(data []byte) (ptr interface{}, err error) {
 	buffer := bytes.NewBuffer(data)
 	decoder := gob.NewDecoder(buffer)
 
@@ -47,7 +47,7 @@ func (sg *SerializerGob) Decode(data []byte) (ptr interface{}, err error) {
 	return
 }
 
-func (sg *SerializerGob) RegisterGobConcreteType(obj interface{}) {
+func (sg *serializerGob) RegisterGobConcreteType(obj interface{}) {
 	typeOf := reflect.TypeOf(obj)
 
 	switch typeOf.Kind() {

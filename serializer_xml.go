@@ -7,15 +7,15 @@ import (
 	`unsafe`
 )
 
-var _ Serializer = (*SerializerXml)(nil)
+var _ Serializer = (*serializerXml)(nil)
 
-type SerializerXml struct{}
+type serializerXml struct{}
 
-func (sx *SerializerXml) Encode(obj interface{}) ([]byte, error) {
+func (sx *serializerXml) Encode(obj interface{}) ([]byte, error) {
 	return xml.Marshal(obj)
 }
 
-func (sx *SerializerXml) Decode(data []byte) (ptr interface{}, err error) {
+func (sx *serializerXml) Decode(data []byte) (ptr interface{}, err error) {
 	buffer := bytes.NewBuffer(data)
 	decoder := xml.NewDecoder(buffer)
 

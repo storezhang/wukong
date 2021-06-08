@@ -8,15 +8,15 @@ import (
 	`github.com/vmihailenco/msgpack`
 )
 
-var _ Serializer = (*SerializerMsgpack)(nil)
+var _ Serializer = (*serializerMsgpack)(nil)
 
-type SerializerMsgpack struct{}
+type serializerMsgpack struct{}
 
-func (sm *SerializerMsgpack) Encode(obj interface{}) ([]byte, error) {
+func (sm *serializerMsgpack) Encode(obj interface{}) ([]byte, error) {
 	return msgpack.Marshal(obj)
 }
 
-func (sm *SerializerMsgpack) Decode(data []byte) (ptr interface{}, err error) {
+func (sm *serializerMsgpack) Decode(data []byte) (ptr interface{}, err error) {
 	buffer := bytes.NewBuffer(data)
 	decoder := msgpack.NewDecoder(buffer)
 

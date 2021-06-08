@@ -4,24 +4,17 @@ import (
 	`time`
 )
 
-var (
-	_ option      = (*optionExpiration)(nil)
-	_ cacheOption = (*optionExpiration)(nil)
-)
+var _ option = (*optionExpiration)(nil)
 
 type optionExpiration struct {
 	expiration time.Duration
 }
 
-// WithExpiration 配置过期时间
-func WithExpiration(expiration time.Duration) *optionExpiration {
+// Expiration 配置过期时间
+func Expiration(expiration time.Duration) *optionExpiration {
 	return &optionExpiration{expiration: expiration}
 }
 
 func (oe *optionExpiration) apply(options *options) {
-	options.Expiration = oe.expiration
-}
-
-func (oe *optionExpiration) applyCache(options *cacheOptions) {
-	options.Expiration = oe.expiration
+	options.expiration = oe.expiration
 }

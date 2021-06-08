@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	sg *SerializerGob
+	sg *serializerGob
 )
 
 func TestGobEncode(t *testing.T) {

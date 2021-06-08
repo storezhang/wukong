@@ -5,12 +5,17 @@ import (
 )
 
 type options struct {
-	// Expiration 过期时间
-	Expiration time.Duration
-	// Tags 标签列表
-	Tags []string
+	// 过期时间
+	expiration time.Duration
+	// 标签列表
+	tags []string
+	// 序列化
+	serializer Serializer
 }
 
-func defaultOptions() options {
-	return options{}
+func defaultOptions() *options {
+	return &options{
+		expiration: 30 * time.Minute,
+		serializer: &serializerGob{},
+	}
 }

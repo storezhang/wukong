@@ -7,15 +7,15 @@ import (
 	`unsafe`
 )
 
-var _ Serializer = (*SerializerJson)(nil)
+var _ Serializer = (*serializerJson)(nil)
 
-type SerializerJson struct{}
+type serializerJson struct{}
 
-func (sj *SerializerJson) Encode(obj interface{}) ([]byte, error) {
+func (sj *serializerJson) Encode(obj interface{}) ([]byte, error) {
 	return json.Marshal(obj)
 }
 
-func (sj *SerializerJson) Decode(data []byte) (ptr interface{}, err error) {
+func (sj *serializerJson) Decode(data []byte) (ptr interface{}, err error) {
 	buffer := bytes.NewBuffer(data)
 	decoder := json.NewDecoder(buffer)
 

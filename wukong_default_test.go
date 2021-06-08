@@ -4,16 +4,13 @@ import (
 	`log`
 	`os`
 	`testing`
-	`time`
 
 	`github.com/alicebob/miniredis`
 	`github.com/go-redis/redis/v8`
 	`github.com/rs/xid`
 )
 
-var (
-	cache Cache
-)
+var cache Wukong
 
 type user struct {
 	Username string `json:"username"`
@@ -32,13 +29,13 @@ func TestMain(m *testing.M) {
 		log.Fatalf("启动Redis服务器出错：%s", err)
 	}
 
-	gob := &SerializerGob{}
+	gob := &serializerGob{}
 	gob.RegisterGobConcreteType(user{})
 	gob.RegisterGobConcreteType([]user{})
 
-	cache = New(NewRedis(redis.NewClient(&redis.Options{
+	cache = New(Redis(redis.NewClient(&redis.Options{
 		Addr: mr.Addr(),
-	})), WithSerializer(gob), WithExpiration(time.Second))
+	})))
 
 	code := m.Run()
 	os.Exit(code)
